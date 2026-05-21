@@ -1,9 +1,13 @@
 const express = require("express");
+const cors = require("cors");
+
 
 const jogosRoutes = require("./routes/jogos.routes");
 const loginRoutes = require("./routes/login.routes");
 
 const app = express();
+
+app.use(cors());
 
 // Middleware JSON
 app.use(express.json());
