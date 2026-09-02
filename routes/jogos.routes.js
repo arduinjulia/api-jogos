@@ -5,12 +5,15 @@ const router = express.Router();
 const {
   listarJogos,
   buscarJogo,
+  buscarPorTipo,
   criarJogo,
   atualizarJogo,
   deletarJogo
 } = require("../controllers/jogos.controller");
 
 router.get("/jogos", listarJogos);
+
+router.get("/jogos/tipo/:tipo", buscarPorTipo);
 
 router.get("/jogos/:id", buscarJogo);
 

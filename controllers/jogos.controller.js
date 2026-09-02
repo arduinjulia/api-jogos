@@ -23,6 +23,15 @@ const buscarJogo = (req, res) => {
   return res.status(200).json(jogo);
 };
 
+// GET /jogos/tipo/:tipo
+const buscarPorTipo = (req, res) => {
+  const tipo = req.params.tipo;
+
+  const jogosFiltrados = jogos.filter(j => j.tipo.toLowerCase() === tipo.toLowerCase());
+
+  return res.status(200).json(jogosFiltrados);
+};
+
 // POST /jogos
 const criarJogo = (req, res) => {
 
@@ -30,7 +39,9 @@ const criarJogo = (req, res) => {
     nome,
     tipo,
     nota,
-    review
+    review,
+    anoLancamento,
+    desenvolvedora
   } = req.body || {};
 
   // Validação obrigatória
@@ -38,17 +49,19 @@ const criarJogo = (req, res) => {
     !nome ||
     !tipo ||
     nota === undefined ||
-    !review
+    !review ||
+    anoLancamento === undefined ||
+    !desenvolvedora
   ) {
     return res.status(400).json({
       erro: "Todos os campos são obrigatórios"
     });
   }
 
-  // Validação nota
-  if (typeof nota !== "number") {
+  // Validação nota e anoLancamento
+  if (typeof nota !== "number" || typeof anoLancamento !== "number") {
     return res.status(400).json({
-      erro: "Nota deve ser numérica"
+      erro: "Nota e Ano de Lançamento devem ser numéricos"
     });
   }
 
@@ -57,7 +70,9 @@ const criarJogo = (req, res) => {
     nome,
     tipo,
     nota,
-    review
+    review,
+    anoLancamento,
+    desenvolvedora
   };
 
   jogos.push(novoJogo);
@@ -74,7 +89,9 @@ const atualizarJogo = (req, res) => {
     nome,
     tipo,
     nota,
-    review
+    review,
+    anoLancamento,
+    desenvolvedora
   } = req.body || {};
 
   // Validação obrigatória
@@ -82,17 +99,19 @@ const atualizarJogo = (req, res) => {
     !nome ||
     !tipo ||
     nota === undefined ||
-    !review
+    !review ||
+    anoLancamento === undefined ||
+    !desenvolvedora
   ) {
     return res.status(400).json({
       erro: "Todos os campos são obrigatórios"
     });
   }
 
-  // Validação nota
-  if (typeof nota !== "number") {
+  // Validação nota e anoLancamento
+  if (typeof nota !== "number" || typeof anoLancamento !== "number") {
     return res.status(400).json({
-      erro: "Nota deve ser numérica"
+      erro: "Nota e Ano de Lançamento devem ser numéricos"
     });
   }
 
@@ -109,7 +128,9 @@ const atualizarJogo = (req, res) => {
     nome,
     tipo,
     nota,
-    review
+    review,
+    anoLancamento,
+    desenvolvedora
   };
 
   return res.status(200).json(jogos[index]);
@@ -136,6 +157,7 @@ const deletarJogo = (req, res) => {
 module.exports = {
   listarJogos,
   buscarJogo,
+  buscarPorTipo,
   criarJogo,
   atualizarJogo,
   deletarJogo
