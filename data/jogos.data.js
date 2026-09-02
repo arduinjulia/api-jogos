@@ -163,6 +163,116 @@ const jogos = [
     desenvolvedora: "Irrational Games",
     plataformas: ["PC", "PS3", "Xbox 360", "PS4", "Xbox One", "Nintendo Switch"],
     preco: 19.99
+  },
+  {
+    id: 16,
+    nome: "Mass Effect 2",
+    tipo: "RPG",
+    nota: 9.8,
+    review: "Um dos melhores jogos de ficção científica, com escolhas que importam.",
+    anoLancamento: 2010,
+    desenvolvedora: "BioWare",
+    plataformas: ["PC", "PS3", "Xbox 360", "PS4", "Xbox One"],
+    preco: 19.99
+  },
+  {
+    id: 17,
+    nome: "Super Smash Bros. Ultimate",
+    tipo: "Luta",
+    nota: 9.4,
+    review: "A celebração definitiva dos videogames.",
+    anoLancamento: 2018,
+    desenvolvedora: "Bandai Namco",
+    plataformas: ["Nintendo Switch"],
+    preco: 59.99
+  },
+  {
+    id: 18,
+    nome: "Doom Eternal",
+    tipo: "FPS",
+    nota: 9.6,
+    review: "Ação frenética e trilha sonora espetacular.",
+    anoLancamento: 2020,
+    desenvolvedora: "id Software",
+    plataformas: ["PC", "PS4", "PS5", "Xbox One", "Xbox Series X/S", "Nintendo Switch"],
+    preco: 39.99
+  },
+  {
+    id: 19,
+    nome: "Sekiro: Shadows Die Twice",
+    tipo: "Ação/Aventura",
+    nota: 9.7,
+    review: "Combate de espadas extremamente recompensador.",
+    anoLancamento: 2019,
+    desenvolvedora: "FromSoftware",
+    plataformas: ["PC", "PS4", "Xbox One"],
+    preco: 59.99
+  },
+  {
+    id: 20,
+    nome: "NieR: Automata",
+    tipo: "Ação/RPG",
+    nota: 9.5,
+    review: "Uma narrativa existencialista profunda e combate ágil.",
+    anoLancamento: 2017,
+    desenvolvedora: "PlatinumGames",
+    plataformas: ["PC", "PS4", "Xbox One", "Nintendo Switch"],
+    preco: 39.99
+  },
+  {
+    id: 21,
+    nome: "Ghost of Tsushima",
+    tipo: "Ação/Aventura",
+    nota: 9.4,
+    review: "Um samurai em busca de vingança em um Japão belíssimo.",
+    anoLancamento: 2020,
+    desenvolvedora: "Sucker Punch Productions",
+    plataformas: ["PS4", "PS5"],
+    preco: 49.99
+  },
+  {
+    id: 22,
+    nome: "Dark Souls",
+    tipo: "Ação/RPG",
+    nota: 9.6,
+    review: "O jogo que definiu um gênero inteiro.",
+    anoLancamento: 2011,
+    desenvolvedora: "FromSoftware",
+    plataformas: ["PC", "PS3", "Xbox 360", "PS4", "Xbox One", "Nintendo Switch"],
+    preco: 19.99
+  },
+  {
+    id: 23,
+    nome: "Half-Life 2",
+    tipo: "FPS",
+    nota: 9.9,
+    review: "Revolucionou o uso de física e narrativa em jogos.",
+    anoLancamento: 2004,
+    desenvolvedora: "Valve",
+    plataformas: ["PC", "Xbox", "Xbox 360", "PS3"],
+    preco: 9.99
+  },
+  {
+    id: 24,
+    nome: "The Last of Us",
+    tipo: "Ação/Aventura",
+    nota: 9.8,
+    review: "Uma das histórias mais emocionantes já contadas nos videogames.",
+    anoLancamento: 2013,
+    desenvolvedora: "Naughty Dog",
+    plataformas: ["PS3", "PS4", "PS5"],
+    preco: 19.99
+  },
+  {
+    id: 25,
+    nome: "Minecraft",
+    tipo: "Sandbox",
+    nota: 9.9,
+    review: "O jogo que te permite construir o que a sua imaginação quiser.",
+    anoLancamento: 2011,
+    desenvolvedora: "Mojang",
+    plataformas: ["PC", "Mobile", "PS3", "PS4", "PS5", "Xbox 360", "Xbox One", "Xbox Series X/S", "Nintendo Switch"],
+    preco: 29.99
   }
 ];
 
