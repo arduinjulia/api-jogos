@@ -1,6 +1,6 @@
 const jogos = require("../data/jogos.data");
 
-let idAtual = 1;
+let idAtual = jogos.length > 0 ? Math.max(...jogos.map(j => j.id)) + 1 : 1;
 
 // GET /jogos
 const listarJogos = (req, res) => {
@@ -32,6 +32,39 @@ const buscarPorTipo = (req, res) => {
   return res.status(200).json(jogosFiltrados);
 };
 
+// GET /jogos/desenvolvedora/:desenvolvedora
+const buscarPorDesenvolvedora = (req, res) => {
+  const desenvolvedora = req.params.desenvolvedora;
+
+  const jogosFiltrados = jogos.filter(j => j.desenvolvedora.toLowerCase() === desenvolvedora.toLowerCase());
+
+  return res.status(200).json(jogosFiltrados);
+};
+
+// GET /jogos/ano/:ano
+const buscarPorAno = (req, res) => {
+  const ano = Number(req.params.ano);
+
+  if (isNaN(ano)) {
+    return res.status(400).json({ erro: "Ano deve ser numérico" });
+  }
+
+  const jogosFiltrados = jogos.filter(j => j.anoLancamento === ano);
+
+  return res.status(200).json(jogosFiltrados);
+};
+
+// GET /jogos/plataforma/:plataforma
+const buscarPorPlataforma = (req, res) => {
+  const plataforma = req.params.plataforma;
+
+  const jogosFiltrados = jogos.filter(j =>
+    j.plataformas.some(p => p.toLowerCase() === plataforma.toLowerCase())
+  );
+
+  return res.status(200).json(jogosFiltrados);
+};
+
 // POST /jogos
 const criarJogo = (req, res) => {
 
@@ -41,7 +74,9 @@ const criarJogo = (req, res) => {
     nota,
     review,
     anoLancamento,
-    desenvolvedora
+    desenvolvedora,
+    plataformas,
+    preco
   } = req.body || {};
 
   // Validação obrigatória
@@ -51,17 +86,26 @@ const criarJogo = (req, res) => {
     nota === undefined ||
     !review ||
     anoLancamento === undefined ||
-    !desenvolvedora
+    !desenvolvedora ||
+    !plataformas ||
+    preco === undefined
   ) {
     return res.status(400).json({
       erro: "Todos os campos são obrigatórios"
     });
   }
 
-  // Validação nota e anoLancamento
-  if (typeof nota !== "number" || typeof anoLancamento !== "number") {
+  // Validação numérica
+  if (typeof nota !== "number" || typeof anoLancamento !== "number" || typeof preco !== "number") {
     return res.status(400).json({
-      erro: "Nota e Ano de Lançamento devem ser numéricos"
+      erro: "Nota, Ano de Lançamento e Preço devem ser numéricos"
+    });
+  }
+
+  // Validação de array
+  if (!Array.isArray(plataformas)) {
+    return res.status(400).json({
+      erro: "Plataformas deve ser uma lista (array)"
     });
   }
 
@@ -72,7 +116,9 @@ const criarJogo = (req, res) => {
     nota,
     review,
     anoLancamento,
-    desenvolvedora
+    desenvolvedora,
+    plataformas,
+    preco
   };
 
   jogos.push(novoJogo);
@@ -91,7 +137,9 @@ const atualizarJogo = (req, res) => {
     nota,
     review,
     anoLancamento,
-    desenvolvedora
+    desenvolvedora,
+    plataformas,
+    preco
   } = req.body || {};
 
   // Validação obrigatória
@@ -101,17 +149,26 @@ const atualizarJogo = (req, res) => {
     nota === undefined ||
     !review ||
     anoLancamento === undefined ||
-    !desenvolvedora
+    !desenvolvedora ||
+    !plataformas ||
+    preco === undefined
   ) {
     return res.status(400).json({
       erro: "Todos os campos são obrigatórios"
     });
   }
 
-  // Validação nota e anoLancamento
-  if (typeof nota !== "number" || typeof anoLancamento !== "number") {
+  // Validação numérica
+  if (typeof nota !== "number" || typeof anoLancamento !== "number" || typeof preco !== "number") {
     return res.status(400).json({
-      erro: "Nota e Ano de Lançamento devem ser numéricos"
+      erro: "Nota, Ano de Lançamento e Preço devem ser numéricos"
+    });
+  }
+
+  // Validação de array
+  if (!Array.isArray(plataformas)) {
+    return res.status(400).json({
+      erro: "Plataformas deve ser uma lista (array)"
     });
   }
 
@@ -130,7 +187,9 @@ const atualizarJogo = (req, res) => {
     nota,
     review,
     anoLancamento,
-    desenvolvedora
+    desenvolvedora,
+    plataformas,
+    preco
   };
 
   return res.status(200).json(jogos[index]);
@@ -158,6 +217,9 @@ module.exports = {
   listarJogos,
   buscarJogo,
   buscarPorTipo,
+  buscarPorDesenvolvedora,
+  buscarPorAno,
+  buscarPorPlataforma,
   criarJogo,
   atualizarJogo,
   deletarJogo
