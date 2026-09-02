@@ -1,10 +1,36 @@
 const jogos = require("../data/jogos.data");
 
-let idAtual = 1;
+let idAtual = jogos.length > 0 ? Math.max(...jogos.map(j => j.id)) + 1 : 1;
 
 // GET /jogos
 const listarJogos = (req, res) => {
-  return res.status(200).json(jogos);
+  const { tipo, desenvolvedora, ano, plataforma } = req.query;
+
+  let resultado = jogos;
+
+  if (tipo) {
+    resultado = resultado.filter(j => j.tipo.toLowerCase() === tipo.toLowerCase());
+  }
+
+  if (desenvolvedora) {
+    resultado = resultado.filter(j => j.desenvolvedora.toLowerCase() === desenvolvedora.toLowerCase());
+  }
+
+  if (ano) {
+    const anoNum = Number(ano);
+    if (isNaN(anoNum)) {
+      return res.status(400).json({ erro: "Parâmetro 'ano' deve ser numérico" });
+    }
+    resultado = resultado.filter(j => j.anoLancamento === anoNum);
+  }
+
+  if (plataforma) {
+    resultado = resultado.filter(j =>
+      j.plataformas.some(p => p.toLowerCase() === plataforma.toLowerCase())
+    );
+  }
+
+  return res.status(200).json(resultado);
 };
 
 // GET /jogos/:id
@@ -30,34 +56,23 @@ const criarJogo = (req, res) => {
     nome,
     tipo,
     nota,
-    review
+    review,
+    anoLancamento,
+    desenvolvedora,
+    plataformas,
+    preco
   } = req.body || {};
-
-  // Validação obrigatória
-  if (
-    !nome ||
-    !tipo ||
-    nota === undefined ||
-    !review
-  ) {
-    return res.status(400).json({
-      erro: "Todos os campos são obrigatórios"
-    });
-  }
-
-  // Validação nota
-  if (typeof nota !== "number") {
-    return res.status(400).json({
-      erro: "Nota deve ser numérica"
-    });
-  }
 
   const novoJogo = {
     id: idAtual++,
     nome,
     tipo,
     nota,
-    review
+    review,
+    anoLancamento,
+    desenvolvedora,
+    plataformas,
+    preco
   };
 
   jogos.push(novoJogo);
@@ -74,27 +89,12 @@ const atualizarJogo = (req, res) => {
     nome,
     tipo,
     nota,
-    review
+    review,
+    anoLancamento,
+    desenvolvedora,
+    plataformas,
+    preco
   } = req.body || {};
-
-  // Validação obrigatória
-  if (
-    !nome ||
-    !tipo ||
-    nota === undefined ||
-    !review
-  ) {
-    return res.status(400).json({
-      erro: "Todos os campos são obrigatórios"
-    });
-  }
-
-  // Validação nota
-  if (typeof nota !== "number") {
-    return res.status(400).json({
-      erro: "Nota deve ser numérica"
-    });
-  }
 
   const index = jogos.findIndex(j => j.id === id);
 
@@ -109,7 +109,11 @@ const atualizarJogo = (req, res) => {
     nome,
     tipo,
     nota,
-    review
+    review,
+    anoLancamento,
+    desenvolvedora,
+    plataformas,
+    preco
   };
 
   return res.status(200).json(jogos[index]);

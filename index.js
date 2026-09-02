@@ -24,7 +24,7 @@ app.use((err, req, res, next) => {
     });
   }
 
-  next();
+  next(err);
 });
 
 // Rota não encontrada
