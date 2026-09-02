@@ -4,7 +4,33 @@ let idAtual = jogos.length > 0 ? Math.max(...jogos.map(j => j.id)) + 1 : 1;
 
 // GET /jogos
 const listarJogos = (req, res) => {
-  return res.status(200).json(jogos);
+  const { tipo, desenvolvedora, ano, plataforma } = req.query;
+
+  let resultado = jogos;
+
+  if (tipo) {
+    resultado = resultado.filter(j => j.tipo.toLowerCase() === tipo.toLowerCase());
+  }
+
+  if (desenvolvedora) {
+    resultado = resultado.filter(j => j.desenvolvedora.toLowerCase() === desenvolvedora.toLowerCase());
+  }
+
+  if (ano) {
+    const anoNum = Number(ano);
+    if (isNaN(anoNum)) {
+      return res.status(400).json({ erro: "Parâmetro 'ano' deve ser numérico" });
+    }
+    resultado = resultado.filter(j => j.anoLancamento === anoNum);
+  }
+
+  if (plataforma) {
+    resultado = resultado.filter(j =>
+      j.plataformas.some(p => p.toLowerCase() === plataforma.toLowerCase())
+    );
+  }
+
+  return res.status(200).json(resultado);
 };
 
 // GET /jogos/:id
@@ -23,48 +49,6 @@ const buscarJogo = (req, res) => {
   return res.status(200).json(jogo);
 };
 
-// GET /jogos/tipo/:tipo
-const buscarPorTipo = (req, res) => {
-  const tipo = req.params.tipo;
-
-  const jogosFiltrados = jogos.filter(j => j.tipo.toLowerCase() === tipo.toLowerCase());
-
-  return res.status(200).json(jogosFiltrados);
-};
-
-// GET /jogos/desenvolvedora/:desenvolvedora
-const buscarPorDesenvolvedora = (req, res) => {
-  const desenvolvedora = req.params.desenvolvedora;
-
-  const jogosFiltrados = jogos.filter(j => j.desenvolvedora.toLowerCase() === desenvolvedora.toLowerCase());
-
-  return res.status(200).json(jogosFiltrados);
-};
-
-// GET /jogos/ano/:ano
-const buscarPorAno = (req, res) => {
-  const ano = Number(req.params.ano);
-
-  if (isNaN(ano)) {
-    return res.status(400).json({ erro: "Ano deve ser numérico" });
-  }
-
-  const jogosFiltrados = jogos.filter(j => j.anoLancamento === ano);
-
-  return res.status(200).json(jogosFiltrados);
-};
-
-// GET /jogos/plataforma/:plataforma
-const buscarPorPlataforma = (req, res) => {
-  const plataforma = req.params.plataforma;
-
-  const jogosFiltrados = jogos.filter(j =>
-    j.plataformas.some(p => p.toLowerCase() === plataforma.toLowerCase())
-  );
-
-  return res.status(200).json(jogosFiltrados);
-};
-
 // POST /jogos
 const criarJogo = (req, res) => {
 
@@ -78,36 +62,6 @@ const criarJogo = (req, res) => {
     plataformas,
     preco
   } = req.body || {};
-
-  // Validação obrigatória
-  if (
-    !nome ||
-    !tipo ||
-    nota === undefined ||
-    !review ||
-    anoLancamento === undefined ||
-    !desenvolvedora ||
-    !plataformas ||
-    preco === undefined
-  ) {
-    return res.status(400).json({
-      erro: "Todos os campos são obrigatórios"
-    });
-  }
-
-  // Validação numérica
-  if (typeof nota !== "number" || typeof anoLancamento !== "number" || typeof preco !== "number") {
-    return res.status(400).json({
-      erro: "Nota, Ano de Lançamento e Preço devem ser numéricos"
-    });
-  }
-
-  // Validação de array
-  if (!Array.isArray(plataformas)) {
-    return res.status(400).json({
-      erro: "Plataformas deve ser uma lista (array)"
-    });
-  }
 
   const novoJogo = {
     id: idAtual++,
@@ -141,36 +95,6 @@ const atualizarJogo = (req, res) => {
     plataformas,
     preco
   } = req.body || {};
-
-  // Validação obrigatória
-  if (
-    !nome ||
-    !tipo ||
-    nota === undefined ||
-    !review ||
-    anoLancamento === undefined ||
-    !desenvolvedora ||
-    !plataformas ||
-    preco === undefined
-  ) {
-    return res.status(400).json({
-      erro: "Todos os campos são obrigatórios"
-    });
-  }
-
-  // Validação numérica
-  if (typeof nota !== "number" || typeof anoLancamento !== "number" || typeof preco !== "number") {
-    return res.status(400).json({
-      erro: "Nota, Ano de Lançamento e Preço devem ser numéricos"
-    });
-  }
-
-  // Validação de array
-  if (!Array.isArray(plataformas)) {
-    return res.status(400).json({
-      erro: "Plataformas deve ser uma lista (array)"
-    });
-  }
 
   const index = jogos.findIndex(j => j.id === id);
 
@@ -216,10 +140,6 @@ const deletarJogo = (req, res) => {
 module.exports = {
   listarJogos,
   buscarJogo,
-  buscarPorTipo,
-  buscarPorDesenvolvedora,
-  buscarPorAno,
-  buscarPorPlataforma,
   criarJogo,
   atualizarJogo,
   deletarJogo
